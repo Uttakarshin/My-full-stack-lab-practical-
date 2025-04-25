@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub User Fetch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    #result p {
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fetch GitHub User's Name</h1>
+  <input type="text" id="username" placeholder="Enter GitHub username">
+  <button onclick="fetchUser()">Search</button>
+  <div id="result"></div>
+
+  <script>
+    async function fetchUser() {
+      const username = document.getElementById('username').value;
+      const resultDiv = document.getElementById('result');
+
+      if (!username) {
+        resultDiv.innerHTML = "<p style='color: red;'>Please enter a username.</p>";
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://api.github.com/users/${username}`);
+        if (response.ok) {
+          const data = await response.json();
+          resultDiv.innerHTML = `<p><strong>Name:</strong> ${data.name || 'No name provided'}</p>`;
+        } else {
+          resultDiv.innerHTML = "<p style='color: red;'>User not found. Please try again.</p>";
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style='color: red;'>An error occurred: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
